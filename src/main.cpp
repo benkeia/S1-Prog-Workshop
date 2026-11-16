@@ -31,6 +31,13 @@ void black_white(sil::Image &image)
         color.b = luminance;
     }
 }
+void invert(sil::Image &image)
+{
+    for (glm::vec3 &color : image.pixels())
+    {
+        color = 1.f - color;
+    }
+}
 
 int main()
 {
@@ -38,7 +45,7 @@ int main()
     // sil::Image image{"images/photo.jpg"};
     // sil::Image image{500, 500};
 
-    black_white(image);
+    invert(image);
 
-    image.save("output/black_white.png");
+    image.save("output/invert.png");
 }
