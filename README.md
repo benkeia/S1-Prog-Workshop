@@ -27,3 +27,7 @@
 ## ⭐⭐ Image bruitée
 
 ![Image bruitée](output/noise.png)
+
+## ⭐⭐ Rotation de 90°
+
+![Rotation de 90°](output/rotate_image.png)

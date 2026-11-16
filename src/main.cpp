@@ -80,13 +80,28 @@ void noise(sil::Image &image)
     }
 }
 
+void rotate_image(sil::Image &image)
+{
+    sil::Image rotated_image{image.height(), image.width()};
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+            // 90° horaire (pour anti-horaire : pixel(image.height() - 1 - y, x))
+            rotated_image.pixel(y, image.width() - 1 - x) = image.pixel(x, y);
+        }
+    }
+
+    image = rotated_image;
+}
+
 int main()
 {
     sil::Image image{"images/logo.png"};
     //  sil::Image image{"images/photo.jpg"};
     // sil::Image image{300, 200};
 
-    noise(image);
+    rotate_image(image);
 
-    image.save("output/noise.png");
+    image.save("output/rotate_image.png");
 }
