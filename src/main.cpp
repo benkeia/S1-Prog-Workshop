@@ -1,4 +1,5 @@
 #include <sil/sil.hpp>
+#include <cmath>
 #include "random.hpp"
 
 void keep_green_only(sil::Image &image)
@@ -120,6 +121,20 @@ void rgb_split(sil::Image &image)
 
     image = splitted_image;
 }
+void brightness(sil::Image &image)
+{
+
+    // Plus la valeur s'approche de 0, plus on éclaircit ; plus elle s'éloigne de 1, plus elle s'assombrit.
+
+    float power = 1.5f;
+
+    for (glm::vec3 &color : image.pixels())
+    {
+        color.r = std::pow(color.r, power);
+        color.g = std::pow(color.g, power);
+        color.b = std::pow(color.b, power);
+    }
+}
 
 int main()
 {
@@ -127,7 +142,7 @@ int main()
     //  sil::Image image{"images/photo.jpg"};
     // sil::Image image{300, 200};
 
-    rgb_split(image);
+    brightness(image);
 
-    image.save("output/rgb_split.png");
+    image.save("output/brightness_down.png");
 }

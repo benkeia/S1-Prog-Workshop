@@ -35,3 +35,8 @@
 ## ⭐⭐ RGB split
 
 ![RGB split](output/rgb_split.png)
+
+## ⭐⭐ Luminosité
+
+![Luminosité +](output/brightness_up.png)
+![Luminosité -](output/brightness_down.png)
