@@ -23,3 +23,7 @@
 ## ⭐⭐ Miroir
 
 ![Miroir](output/mirror.png)
+
+## ⭐⭐ Image bruitée
+
+![Image bruitée](output/noise.png)

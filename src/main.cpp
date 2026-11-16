@@ -1,4 +1,5 @@
 #include <sil/sil.hpp>
+#include "random.hpp"
 
 void keep_green_only(sil::Image &image)
 {
@@ -61,6 +62,23 @@ void mirror(sil::Image &image)
         }
     }
 }
+void noise(sil::Image &image)
+{
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+            int noise = random_int(0, 3);
+            if (noise == 0)
+            {
+
+                image.pixel(x, y).r = random_float(0.f, 1.f);
+                image.pixel(x, y).g = random_float(0.f, 1.f);
+                image.pixel(x, y).b = random_float(0.f, 1.f);
+            }
+        }
+    }
+}
 
 int main()
 {
@@ -68,7 +86,7 @@ int main()
     //  sil::Image image{"images/photo.jpg"};
     // sil::Image image{300, 200};
 
-    mirror(image);
+    noise(image);
 
-    image.save("output/mirror.png");
+    image.save("output/noise.png");
 }
