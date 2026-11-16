@@ -9,13 +9,22 @@ void keep_green_only(sil::Image &image)
     }
 }
 
+void swap_channel(sil::Image &image)
+{
+
+    for (glm::vec3 &color : image.pixels())
+    {
+        std::swap(color.r, color.b);
+    }
+}
+
 int main()
 {
     sil::Image image{"images/logo.png"};
     // sil::Image image{"images/photo.jpg"};
     // sil::Image image{500, 500};
 
-    keep_green_only(image);
+    swap_channel(image);
 
-    image.save("output/result.png");
+    image.save("output/debug.png");
 }
