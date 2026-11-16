@@ -95,13 +95,39 @@ void rotate_image(sil::Image &image)
     image = rotated_image;
 }
 
+void rgb_split(sil::Image &image)
+{
+    int offset{30};
+
+    sil::Image splitted_image{image.width(), image.height()};
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+
+            if (x - offset >= 0)
+            {
+                splitted_image.pixel(x - offset, y).r = image.pixel(x, y).r;
+            }
+            if (x + offset < image.width())
+            {
+                splitted_image.pixel(x + offset, y).b = image.pixel(x, y).b;
+            }
+
+            splitted_image.pixel(x, y).g = image.pixel(x, y).g;
+        }
+    }
+
+    image = splitted_image;
+}
+
 int main()
 {
     sil::Image image{"images/logo.png"};
     //  sil::Image image{"images/photo.jpg"};
     // sil::Image image{300, 200};
 
-    rotate_image(image);
+    rgb_split(image);
 
-    image.save("output/rotate_image.png");
+    image.save("output/rgb_split.png");
 }

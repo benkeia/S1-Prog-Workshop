@@ -31,3 +31,7 @@
 ## ⭐⭐ Rotation de 90°
 
 ![Rotation de 90°](output/rotate_image.png)
+
+## ⭐⭐ RGB split
+
+![RGB split](output/rgb_split.png)
