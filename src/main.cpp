@@ -51,13 +51,24 @@ void gradient(sil::Image &image)
     }
 }
 
+void mirror(sil::Image &image)
+{
+    for (int x{0}; x < image.width() / 2; x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+            std::swap(image.pixel(x, y), image.pixel(image.width() - 1 - x, y));
+        }
+    }
+}
+
 int main()
 {
-    // sil::Image image{"images/logo.png"};
+    sil::Image image{"images/logo.png"};
     //  sil::Image image{"images/photo.jpg"};
-    sil::Image image{300, 200};
+    // sil::Image image{300, 200};
 
-    gradient(image);
+    mirror(image);
 
-    image.save("output/gradient.png");
+    image.save("output/mirror.png");
 }

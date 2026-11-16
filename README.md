@@ -19,3 +19,7 @@
 ## ⭐ Dégradé
 
 ![Dégradé](output/gradient.png)
+
+## ⭐⭐ Miroir
+
+![Miroir](output/mirror.png)
