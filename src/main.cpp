@@ -39,13 +39,25 @@ void invert(sil::Image &image)
     }
 }
 
+void gradient(sil::Image &image)
+{
+    for (int x{0}; x < image.width(); x++)
+    {
+        float color_value = static_cast<float>(x) / static_cast<float>(image.width() - 1);
+        for (int y{0}; y < image.height(); y++)
+        {
+            image.pixel(x, y) = glm::vec3{color_value};
+        }
+    }
+}
+
 int main()
 {
-    sil::Image image{"images/logo.png"};
-    // sil::Image image{"images/photo.jpg"};
-    // sil::Image image{500, 500};
+    // sil::Image image{"images/logo.png"};
+    //  sil::Image image{"images/photo.jpg"};
+    sil::Image image{300, 200};
 
-    invert(image);
+    gradient(image);
 
-    image.save("output/invert.png");
+    image.save("output/gradient.png");
 }

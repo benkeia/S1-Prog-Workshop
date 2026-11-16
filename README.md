@@ -15,3 +15,7 @@
 ## ⭐ Négatif
 
 ![Négatif](output/invert.png)
+
+## ⭐ Dégradé
+
+![Dégradé](output/gradient.png)
