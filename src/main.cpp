@@ -18,13 +18,27 @@ void swap_channel(sil::Image &image)
     }
 }
 
+void black_white(sil::Image &image)
+{
+
+    for (glm::vec3 &color : image.pixels())
+    {
+
+        float luminance = color.r * 0.2126f + color.g * 0.7152f + color.b * 0.0722f;
+
+        color.r = luminance;
+        color.g = luminance;
+        color.b = luminance;
+    }
+}
+
 int main()
 {
     sil::Image image{"images/logo.png"};
     // sil::Image image{"images/photo.jpg"};
     // sil::Image image{500, 500};
 
-    swap_channel(image);
+    black_white(image);
 
-    image.save("output/debug.png");
+    image.save("output/black_white.png");
 }

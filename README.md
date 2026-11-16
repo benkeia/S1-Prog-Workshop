@@ -7,3 +7,7 @@
 ## ⭐ Échanger les canaux
 
 ![Échanger les canaux](output/swap_channel.png)
+
+## ⭐ Noir & Blanc
+
+![Noir & Blanc](output/black_white.png)
