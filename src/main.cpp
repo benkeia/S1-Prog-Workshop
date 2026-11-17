@@ -1,6 +1,8 @@
 #include <sil/sil.hpp>
 #include <cmath>
 #include "random.hpp"
+#include <vector>
+#include <algorithm>
 
 void keep_green_only(sil::Image &image)
 {
@@ -33,6 +35,7 @@ void black_white(sil::Image &image)
         color.b = luminance;
     }
 }
+
 void invert(sil::Image &image)
 {
     for (glm::vec3 &color : image.pixels())
@@ -63,6 +66,7 @@ void mirror(sil::Image &image)
         }
     }
 }
+
 void noise(sil::Image &image)
 {
     for (int x{0}; x < image.width(); x++)
@@ -121,6 +125,7 @@ void rgb_split(sil::Image &image)
 
     image = splitted_image;
 }
+
 void brightness(sil::Image &image)
 {
 
@@ -136,13 +141,75 @@ void brightness(sil::Image &image)
     }
 }
 
+float getLuminance(const glm::vec3 &color)
+{
+    return 0.2126f * color.r + 0.7152f * color.g + 0.0722f * color.b;
+}
+
+void pixel_sort(sil::Image &image)
+{
+    std::sort(image.pixels().begin(), image.pixels().end(), [](glm::vec3 const &color1, glm::vec3 const &color2)
+              { return getLuminance(color1) < getLuminance(color2); });
+}
+
+sil::Image resize(const sil::Image &image, int new_width, int new_height)
+{
+    sil::Image result{new_width, new_height};
+
+    for (int x{0}; x < new_width; ++x)
+    {
+        for (int y{0}; y < new_height; ++y)
+        {
+            result.pixel(x, y) = image.pixel(
+                x * image.width() / new_width,
+                y * image.height() / new_height);
+        }
+    }
+
+    return result;
+}
+
+sil::Image rearrange(sil::Image source, const sil::Image &target)
+{
+    source = resize(source, target.width(), target.height());
+    pixel_sort(source);
+
+    sil::Image result{target.width(), target.height()};
+
+    // 1. On liste chaque case de destination avec sa luminance cible
+    struct Slot
+    {
+        float luminance;
+        glm::vec3 *pixel;
+    };
+
+    std::vector<Slot> slots;
+    slots.reserve(target.pixels().size());
+    for (size_t i{0}; i < target.pixels().size(); ++i)
+    {
+        slots.push_back({getLuminance(target.pixels()[i]), &result.pixels()[i]});
+    }
+
+    // 2. On trie les cases de la plus sombre à la plus claire
+    std::sort(slots.begin(), slots.end(), [](const Slot &a, const Slot &b)
+              { return a.luminance < b.luminance; });
+
+    // 3. On remplit chaque case triée avec le pixel source correspondant
+    for (size_t i{0}; i < slots.size(); ++i)
+    {
+        *slots[i].pixel = source.pixels()[i];
+    }
+
+    return result;
+}
+
 int main()
 {
-    sil::Image image{"images/logo.png"};
-    //  sil::Image image{"images/photo.jpg"};
+    sil::Image image{"images/photo.jpg"};
+    sil::Image photo{"images/lucas.png"};
     // sil::Image image{300, 200};
 
-    brightness(image);
+    pixel_sort(image);
 
-    image.save("output/brightness_down.png");
+    image.save("output/pixel_sort.png");
 }

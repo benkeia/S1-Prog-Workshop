@@ -40,3 +40,11 @@
 
 ![Luminosité +](output/brightness_up.png)
 ![Luminosité -](output/brightness_down.png)
+
+## ⭐⭐⭐ Filtre Lucas
+
+![Filtre Lucas](output/lucas_filter.png)
+
+## ⭐⭐⭐ Tri de pixels
+
+![Tri de pixels](output/pixel_sort.png)
