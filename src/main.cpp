@@ -225,10 +225,8 @@ void disc(sil::Image &image)
     }
 }
 
-void circle(sil::Image &image)
+void circle(sil::Image &image, int centerX, int centerY)
 {
-    int centerX = image.width() / 2;
-    int centerY = image.height() / 2;
     int radius = 100;
     int thickness = 5;
     int outerSquared = radius * radius;
@@ -250,13 +248,40 @@ void circle(sil::Image &image)
     }
 }
 
+void circle(sil::Image &image)
+{
+    circle(image, image.width() / 2, image.height() / 2);
+}
+
+void rosace(sil::Image &image)
+{
+    int centerX = image.width() / 2;
+    int centerY = image.height() / 2;
+    int radius = 100; // Même rayon que dans votre fonction circle
+    int nombreCercles = 6;
+
+    circle(image, centerX, centerY);
+
+    float angleStep = (2.f * 3.14f) / nombreCercles;
+
+    for (int i = 0; i < nombreCercles; ++i)
+    {
+        float angle = i * angleStep;
+
+        int posX = centerX + static_cast<int>(radius * std::cos(angle));
+        int posY = centerY + static_cast<int>(radius * std::sin(angle));
+
+        circle(image, posX, posY);
+    }
+}
+
 int main()
 {
     // sil::Image image{"images/photo.jpg"};
     sil::Image photo{"images/lucas.png"};
     sil::Image image{500, 500};
 
-    disc(image);
+    rosace(image);
 
-    image.save("output/disc.png");
+    image.save("output/rosace.png");
 }

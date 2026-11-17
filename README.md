@@ -45,10 +45,6 @@
 
 ![Filtre Lucas](output/lucas_filter.png)
 
-## ⭐⭐⭐ Tri de pixels
-
-![Tri de pixels](output/pixel_sort.png)
-
 ## ⭐⭐(⭐) Disque
 
 ![Disque](output/disc.png)
@@ -56,3 +52,11 @@
 ## ⭐⭐(⭐) Cercle
 
 ![Cercle](output/circle.png)
+
+## ⭐⭐⭐ Rosace
+
+![Rosace](output/rosace.png)
+
+## ⭐⭐⭐ Tri de pixels
+
+![Tri de pixels](output/pixel_sort.png)
