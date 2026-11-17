@@ -203,13 +203,60 @@ sil::Image rearrange(sil::Image source, const sil::Image &target)
     return result;
 }
 
+void disc(sil::Image &image)
+{
+    int centerX = image.width() / 2;
+    int centerY = image.height() / 2;
+    int radius = 100;
+    int squaredRadius = radius * radius;
+
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+            int dx = x - centerX;
+            int dy = y - centerY;
+
+            if (dx * dx + dy * dy <= squaredRadius)
+            {
+                image.pixel(x, y) = glm::vec3{1.f};
+            }
+        }
+    }
+}
+
+void circle(sil::Image &image)
+{
+    int centerX = image.width() / 2;
+    int centerY = image.height() / 2;
+    int radius = 100;
+    int thickness = 5;
+    int outerSquared = radius * radius;
+    int innerSquared = (radius - thickness) * (radius - thickness);
+
+    for (int x{0}; x < image.width(); x++)
+    {
+        for (int y{0}; y < image.height(); y++)
+        {
+            int dx = x - centerX;
+            int dy = y - centerY;
+            int distSquared = dx * dx + dy * dy;
+
+            if (distSquared <= outerSquared && distSquared >= innerSquared)
+            {
+                image.pixel(x, y) = glm::vec3{1.f};
+            }
+        }
+    }
+}
+
 int main()
 {
-    sil::Image image{"images/photo.jpg"};
+    // sil::Image image{"images/photo.jpg"};
     sil::Image photo{"images/lucas.png"};
-    // sil::Image image{300, 200};
+    sil::Image image{500, 500};
 
-    pixel_sort(image);
+    disc(image);
 
-    image.save("output/pixel_sort.png");
+    image.save("output/disc.png");
 }

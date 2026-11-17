@@ -48,3 +48,11 @@
 ## ⭐⭐⭐ Tri de pixels
 
 ![Tri de pixels](output/pixel_sort.png)
+
+## ⭐⭐(⭐) Disque
+
+![Disque](output/disc.png)
+
+## ⭐⭐(⭐) Cercle
+
+![Cercle](output/circle.png)
