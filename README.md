@@ -16,9 +16,9 @@
 
 ![Négatif](output/invert.png)
 
-## ⭐ Dégradé
+## ⭐ Dégradé noir et blanc
 
-![Dégradé](output/gradient.png)
+![Dégradé noir et blanc](output/gradient/black_white_srgb.png)
 
 ## ⭐⭐ Miroir
 
@@ -80,3 +80,9 @@
 ## ⭐⭐⭐(⭐) Fractale de Mandelbrot
 
 ![Fractale de Mandelbrot](output/fractal.png)
+
+## ⭐⭐⭐(⭐) Dégradés dans l'espace de couleur sRGB vs Oklab
+
+| Rouge → vert sRGB | Rouge → vert Oklab | Rouge → bleu sRGB | Rouge → bleu Oklab |
+| --- | --- | --- | --- |
+| ![Dégradé rouge vert sRGB](output/gradient/red_green_srgb.png) | ![Dégradé rouge vert Oklab](output/gradient/red_green_oklab.png) | ![Dégradé rouge bleu sRGB](output/gradient/red_blue_srgb.png) | ![Dégradé rouge bleu Oklab](output/gradient/red_blue_oklab.png) |

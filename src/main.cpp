@@ -4,7 +4,6 @@
 #include <vector>
 #include <algorithm>
 #include <complex>
-#include <complex>
 
 void keep_green_only(sil::Image &image)
 {
@@ -46,14 +45,14 @@ void invert(sil::Image &image)
     }
 }
 
-void gradient(sil::Image &image)
+void gradient(sil::Image &image, glm::vec3 startColor, glm::vec3 endColor)
 {
     for (int x{0}; x < image.width(); x++)
     {
-        float color_value = static_cast<float>(x) / static_cast<float>(image.width() - 1);
+        float percentage = static_cast<float>(x) / static_cast<float>(image.width() - 1);
         for (int y{0}; y < image.height(); y++)
         {
-            image.pixel(x, y) = glm::vec3{color_value};
+            image.pixel(x, y) = glm::mix(startColor, endColor, percentage);
         }
     }
 }
@@ -397,12 +396,96 @@ void fractal(sil::Image &image)
     }
 }
 
+void srgb_to_linear(glm::vec3 &color)
+{
+    for (int i{0}; i < 3; ++i)
+    {
+        float &channel = color[i];
+        if (channel <= 0.04045f)
+        {
+            channel /= 12.92f;
+        }
+        else
+        {
+            channel = std::pow((channel + 0.055f) / 1.055f, 2.4f);
+        }
+    }
+}
+
+glm::vec3 linear_to_srgb(glm::vec3 color)
+{
+    for (int i{0}; i < 3; ++i)
+    {
+        float &channel = color[i];
+        if (channel <= 0.0031308f)
+        {
+            channel *= 12.92f;
+        }
+        else
+        {
+            channel = 1.055f * std::pow(channel, 1.f / 2.4f) - 0.055f;
+        }
+    }
+
+    return color;
+}
+
+glm::vec3 linear_rgb_to_oklab(glm::vec3 color)
+{
+    float l = 0.4122214708f * color.r + 0.5363325363f * color.g + 0.0514459929f * color.b;
+    float m = 0.2119034982f * color.r + 0.6806995451f * color.g + 0.1073969566f * color.b;
+    float s = 0.0883024619f * color.r + 0.2817188376f * color.g + 0.6299787005f * color.b;
+
+    l = std::cbrt(l);
+    m = std::cbrt(m);
+    s = std::cbrt(s);
+
+    return glm::vec3{
+        0.2104542553f * l + 0.7936177850f * m - 0.0040720468f * s,
+        1.9779984951f * l - 2.4285922050f * m + 0.4505937099f * s,
+        0.0259040371f * l + 0.7827717662f * m - 0.8086757660f * s};
+}
+
+glm::vec3 oklab_to_linear_rgb(glm::vec3 color)
+{
+    float l = color.x + 0.3963377774f * color.y + 0.2158037573f * color.z;
+    float m = color.x - 0.1055613458f * color.y - 0.0638541728f * color.z;
+    float s = color.x - 0.0894841775f * color.y - 1.2914855480f * color.z;
+
+    l = l * l * l;
+    m = m * m * m;
+    s = s * s * s;
+
+    return glm::vec3{
+        4.0767416621f * l - 3.3077115913f * m + 0.2309699292f * s,
+        -1.2684380046f * l + 2.6097574011f * m - 0.3413193965f * s,
+        -0.0041960863f * l - 0.7034186147f * m + 1.7076147010f * s};
+}
+
+void gradient_oklab(sil::Image &image, glm::vec3 startColor, glm::vec3 endColor)
+{
+    srgb_to_linear(startColor);
+    srgb_to_linear(endColor);
+    startColor = linear_rgb_to_oklab(startColor);
+    endColor = linear_rgb_to_oklab(endColor);
+
+    for (int x{0}; x < image.width(); ++x)
+    {
+        float percentage = static_cast<float>(x) / static_cast<float>(image.width() - 1);
+        for (int y{0}; y < image.height(); ++y)
+        {
+            glm::vec3 color = glm::mix(startColor, endColor, percentage);
+            color = oklab_to_linear_rgb(color);
+            color = linear_to_srgb(color);
+            image.pixel(x, y) = color;
+        }
+    }
+}
+
 int main()
 {
-    // sil::Image image{"images/logo.png"};
-    sil::Image photo{"images/lucas.png"};
-    sil::Image image{500, 500};
+    sil::Image image{300, 200};
 
-    fractal(image);
-    image.save("output/fractal.png");
+    gradient_oklab(image, glm::vec3{1.f, 0.f, 0.f}, glm::vec3{0.f, 0.f, 1.f});
+    image.save("output/gradient/red_blue_oklab.png");
 }
