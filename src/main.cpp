@@ -289,11 +289,58 @@ void rosace(sil::Image &image)
     }
 }
 
+void mosaic(sil::Image &image)
+{
+    int longueurX = 4;
+    int longueurY = 4;
+    sil::Image mosaic_image{image.width() * longueurX, image.height() * longueurY};
+
+    for (int x{0}; x < image.width() * longueurX; x++)
+    {
+        for (int y{0}; y < image.height() * longueurY; y++)
+        {
+            mosaic_image.pixel(x, y) = image.pixel(x % image.width(), y % image.height());
+        }
+    }
+    mosaic_image.save("output/mosaique.png");
+}
+
+void mosaic_mirror(sil::Image &image)
+{
+    int longueurX = 4;
+    int longueurY = 4;
+    sil::Image mosaic{image.width() * longueurX, image.height() * longueurY};
+
+    for (int x{0}; x < image.width() * longueurX; x++)
+    {
+        for (int y{0}; y < image.height() * longueurY; y++)
+
+        {
+
+            int srcx = x % image.width();
+            int srcy = y % image.height();
+
+            if (x / image.width() % 2 == 1)
+            {
+                srcx = image.width() - 1 - srcx;
+            }
+            if (y / image.height() % 2 == 1)
+            {
+                srcy = image.height() - 1 - srcy;
+            }
+
+            mosaic.pixel(x, y) = image.pixel(srcx, srcy);
+        }
+    }
+
+    mosaic.save("output/mosaic_mirror.png");
+}
+
 int main()
 {
-    // sil::Image image{"images/photo.jpg"};
+    sil::Image image{"images/photo.jpg"};
     sil::Image photo{"images/lucas.png"};
-    sil::Image image{500, 500};
+    // sil::Image image{500, 500};
 
-    animation(image);
+    mosaic_mirror(image);
 }

@@ -64,3 +64,11 @@
 ## ⭐⭐⭐ Tri de pixels
 
 ![Tri de pixels](output/pixel_sort.png)
+
+## ⭐⭐ Mosaïque
+
+![Mosaïque](output/mosaic.png)
+
+## ⭐⭐⭐⭐ Mosaïque miroir
+
+![Mosaïque miroir](output/mosaic_mirror.png)
