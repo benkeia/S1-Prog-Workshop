@@ -3,6 +3,8 @@
 #include "random.hpp"
 #include <vector>
 #include <algorithm>
+#include <complex>
+#include <complex>
 
 void keep_green_only(sil::Image &image)
 {
@@ -369,12 +371,38 @@ void glitch(sil::Image &image)
     }
 }
 
+void fractal(sil::Image &image)
+{
+    int maxIterations{200};
+
+    for (int x{0}; x < image.width(); ++x)
+    {
+        for (int y{0}; y < image.height(); ++y)
+        {
+            float real = 4.f * x / image.width() - 2.f;
+            float imaginary = 4.f * y / image.height() - 2.f;
+            std::complex<float> c{real, imaginary};
+            std::complex<float> z{0.f, 0.f};
+
+            int iterations{0};
+            while (std::abs(z) <= 2.f && iterations < maxIterations)
+            {
+                z = z * z + c;
+                ++iterations;
+            }
+
+            float gray = std::sqrt(iterations / static_cast<float>(maxIterations));
+            image.pixel(x, y) = glm::vec3{gray};
+        }
+    }
+}
+
 int main()
 {
-    sil::Image image{"images/logo.png"};
+    // sil::Image image{"images/logo.png"};
     sil::Image photo{"images/lucas.png"};
-    // sil::Image image{500, 500};
+    sil::Image image{500, 500};
 
-    glitch(image);
-    image.save("output/glitch.png");
+    fractal(image);
+    image.save("output/fractal.png");
 }

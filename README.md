@@ -76,3 +76,7 @@
 ## ⭐⭐⭐ Glitch
 
 ![Glitch](output/glitch.png)
+
+## ⭐⭐⭐(⭐) Fractale de Mandelbrot
+
+![Fractale de Mandelbrot](output/fractal.png)
