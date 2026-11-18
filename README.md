@@ -53,6 +53,10 @@
 
 ![Cercle](output/circle.png)
 
+## ⭐⭐ Animation
+
+![Animation](output/animation.gif)
+
 ## ⭐⭐⭐ Rosace
 
 ![Rosace](output/rosace.png)

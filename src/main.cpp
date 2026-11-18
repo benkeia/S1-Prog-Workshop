@@ -250,7 +250,21 @@ void circle(sil::Image &image, int centerX, int centerY)
 
 void circle(sil::Image &image)
 {
+
     circle(image, image.width() / 2, image.height() / 2);
+}
+
+void animation(sil::Image &image)
+{
+    int step = image.width() / 8;
+
+    for (int frameNumber{0}, centerX{0}; centerX <= image.width(); ++frameNumber, centerX += step)
+    {
+        sil::Image frame{image.width(), image.height()};
+        circle(frame, centerX, frame.height() / 2);
+
+        frame.save("output/animation/frame" + std::to_string(frameNumber) + ".png");
+    }
 }
 
 void rosace(sil::Image &image)
@@ -281,7 +295,5 @@ int main()
     sil::Image photo{"images/lucas.png"};
     sil::Image image{500, 500};
 
-    rosace(image);
-
-    image.save("output/rosace.png");
+    animation(image);
 }
