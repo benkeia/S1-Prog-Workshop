@@ -336,11 +336,45 @@ void mosaic_mirror(sil::Image &image)
     mosaic.save("output/mosaic_mirror.png");
 }
 
+void glitch(sil::Image &image)
+{
+
+    int glitch_amount = 60;
+    for (int i = 0; i < glitch_amount; i++)
+    {
+        int glitch_height = random_int(5, 10);
+        int glitch_width = random_int(20, 40);
+
+        int x1 = random_int(0, image.width() - glitch_width);
+        int x2 = random_int(0, image.width() - glitch_width);
+        int y1 = random_int(0, image.height() - glitch_height);
+        int y2 = random_int(0, image.height() - glitch_height);
+
+        for (int x{0}; x < image.width(); x++)
+        {
+            for (int y{0}; y < image.height(); y++)
+            {
+
+                if (x >= x1 && x < x1 + glitch_width &&
+                    y >= y1 && y < y1 + glitch_height)
+                {
+
+                    int dx = x - x1;
+                    int dy = y - y1;
+
+                    std::swap(image.pixel(x, y), image.pixel(dx, dy));
+                }
+            }
+        }
+    }
+}
+
 int main()
 {
-    sil::Image image{"images/photo.jpg"};
+    sil::Image image{"images/logo.png"};
     sil::Image photo{"images/lucas.png"};
     // sil::Image image{500, 500};
 
-    mosaic_mirror(image);
+    glitch(image);
+    image.save("output/glitch.png");
 }
