@@ -562,12 +562,75 @@ void k_means(sil::Image &image, int means = 3)
     }
 }
 
+void kuwahara(sil::Image &image, int radius = 4)
+{
+    sil::Image copy = image;
+
+    for (int x{0}; x < image.width(); ++x)
+    {
+        for (int y{0}; y < image.height(); ++y)
+        {
+            int quadrants[4][4] = {
+                {x - radius, x, y - radius, y},
+                {x, x + radius, y - radius, y},
+                {x - radius, x, y, y + radius},
+                {x, x + radius, y, y + radius},
+            };
+
+            float min_variance = std::numeric_limits<float>::max();
+            glm::vec3 best_color{0.f};
+
+            for (int q{0}; q < 4; ++q)
+            {
+                glm::vec3 sum{0.f};
+                int count{0};
+
+                for (int qx{quadrants[q][0]}; qx <= quadrants[q][1]; ++qx)
+                {
+                    for (int qy{quadrants[q][2]}; qy <= quadrants[q][3]; ++qy)
+                    {
+                        if (qx < 0 || qx >= image.width() || qy < 0 || qy >= image.height())
+                        {
+                            continue;
+                        }
+                        sum += copy.pixel(qx, qy);
+                        count++;
+                    }
+                }
+
+                glm::vec3 mean = sum / static_cast<float>(count);
+                float variance{0.f};
+
+                for (int qx{quadrants[q][0]}; qx <= quadrants[q][1]; ++qx)
+                {
+                    for (int qy{quadrants[q][2]}; qy <= quadrants[q][3]; ++qy)
+                    {
+                        if (qx < 0 || qx >= image.width() || qy < 0 || qy >= image.height())
+                        {
+                            continue;
+                        }
+                        glm::vec3 diff = copy.pixel(qx, qy) - mean;
+                        variance += diff.r * diff.r + diff.g * diff.g + diff.b * diff.b;
+                    }
+                }
+
+                variance /= static_cast<float>(count);
+
+                if (variance < min_variance)
+                {
+                    min_variance = variance;
+                    best_color = mean;
+                }
+            }
+
+            image.pixel(x, y) = best_color;
+        }
+    }
+}
+
 int main()
 {
-    for (int k : {2, 3, 16})
-    {
-        sil::Image image{"images/photo.jpg"};
-        k_means(image, k);
-        image.save("output/kmeans/kmeans_" + std::to_string(k) + ".png");
-    }
+    sil::Image image{"images/photo.jpg"};
+    kuwahara(image, 4);
+    image.save("output/kuwahara.png");
 }

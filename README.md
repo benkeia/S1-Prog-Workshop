@@ -92,3 +92,7 @@
 | Originale | 2 couleurs | 3 couleurs | 16 couleurs |
 | --- | --- | --- | --- |
 | ![Originale](images/photo.jpg) | ![2 couleurs](output/kmeans/kmeans_2.png) | ![3 couleurs](output/kmeans/kmeans_3.png) | ![16 couleurs](output/kmeans/kmeans_16.png) |
+
+## ⭐⭐⭐⭐⭐ Filtre de Kuwahara (effet peinture à l'huile)
+
+![Filtre de Kuwahara](output/kuwahara.png)
