@@ -4,6 +4,7 @@
 #include <vector>
 #include <algorithm>
 #include <complex>
+#include <limits>
 
 void keep_green_only(sil::Image &image)
 {
@@ -482,10 +483,91 @@ void gradient_oklab(sil::Image &image, glm::vec3 startColor, glm::vec3 endColor)
     }
 }
 
+void k_means(sil::Image &image, int means = 3)
+{
+    if (means <= 0 || image.width() == 0 || image.height() == 0)
+    {
+        return;
+    }
+
+    std::vector<glm::vec3> colors(means);
+    std::vector<int> labels(image.pixels().size());
+
+    for (int i{0}; i < means; ++i)
+    {
+        int random_colorX = random_int(0, image.width() - 1);
+        int random_colorY = random_int(0, image.height() - 1);
+
+        colors[i] = image.pixel(random_colorX, random_colorY);
+    }
+
+    for (int k{0}; k < 10; ++k)
+    {
+        std::vector<glm::vec3> sums(means, glm::vec3{0.f});
+        std::vector<int> counts(means, 0);
+
+        for (int x{0}; x < image.width(); ++x)
+        {
+            for (int y{0}; y < image.height(); ++y)
+            {
+                float smallestDistance = std::numeric_limits<float>::max();
+                int closestColor = 0;
+
+                for (int i{0}; i < means; ++i)
+                {
+                    float distance = glm::distance(image.pixel(x, y), colors[i]);
+                    if (distance < smallestDistance)
+                    {
+                        smallestDistance = distance;
+                        closestColor = i;
+                    }
+                }
+
+                int index = y * image.width() + x;
+                labels[index] = closestColor;
+
+                sums[closestColor] += image.pixel(x, y);
+                counts[closestColor]++;
+            }
+        }
+
+        for (int i{0}; i < means; ++i)
+        {
+            if (counts[i] > 0)
+            {
+                colors[i] = sums[i] / static_cast<float>(counts[i]);
+            }
+        }
+    }
+
+    for (int x{0}; x < image.width(); ++x)
+    {
+        for (int y{0}; y < image.height(); ++y)
+        {
+            float smallestDistance = std::numeric_limits<float>::max();
+            int closestColor = 0;
+
+            for (int i{0}; i < means; ++i)
+            {
+                float distance = glm::distance(image.pixel(x, y), colors[i]);
+                if (distance < smallestDistance)
+                {
+                    smallestDistance = distance;
+                    closestColor = i;
+                }
+            }
+
+            image.pixel(x, y) = colors[closestColor];
+        }
+    }
+}
+
 int main()
 {
-    sil::Image image{300, 200};
-
-    gradient_oklab(image, glm::vec3{1.f, 0.f, 0.f}, glm::vec3{0.f, 0.f, 1.f});
-    image.save("output/gradient/red_blue_oklab.png");
+    for (int k : {2, 3, 16})
+    {
+        sil::Image image{"images/photo.jpg"};
+        k_means(image, k);
+        image.save("output/kmeans/kmeans_" + std::to_string(k) + ".png");
+    }
 }

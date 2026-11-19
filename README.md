@@ -86,3 +86,9 @@
 | Rouge → vert sRGB | Rouge → vert Oklab | Rouge → bleu sRGB | Rouge → bleu Oklab |
 | --- | --- | --- | --- |
 | ![Dégradé rouge vert sRGB](output/gradient/red_green_srgb.png) | ![Dégradé rouge vert Oklab](output/gradient/red_green_oklab.png) | ![Dégradé rouge bleu sRGB](output/gradient/red_blue_srgb.png) | ![Dégradé rouge bleu Oklab](output/gradient/red_blue_oklab.png) |
+
+## ⭐⭐⭐⭐⭐ K-means : trouver les couleurs les plus présentes dans une image
+
+| Originale | 2 couleurs | 3 couleurs | 16 couleurs |
+| --- | --- | --- | --- |
+| ![Originale](images/photo.jpg) | ![2 couleurs](output/kmeans/kmeans_2.png) | ![3 couleurs](output/kmeans/kmeans_3.png) | ![16 couleurs](output/kmeans/kmeans_16.png) |
