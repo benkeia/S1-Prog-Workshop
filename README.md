@@ -87,6 +87,12 @@
 | --- | --- | --- | --- |
 | ![Dégradé rouge vert sRGB](output/gradient/red_green_srgb.png) | ![Dégradé rouge vert Oklab](output/gradient/red_green_oklab.png) | ![Dégradé rouge bleu sRGB](output/gradient/red_blue_srgb.png) | ![Dégradé rouge bleu Oklab](output/gradient/red_blue_oklab.png) |
 
+## ⭐⭐⭐(⭐) Normalisation de l'histogramme
+
+| Avant | Après |
+| --- | --- |
+| ![Avant](images/photo_faible_contraste.jpg) | ![Après](output/histogram_normalization.png) |
+
 ## ⭐⭐⭐⭐⭐ K-means : trouver les couleurs les plus présentes dans une image
 
 | Originale | 2 couleurs | 3 couleurs | 16 couleurs |

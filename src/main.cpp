@@ -628,9 +628,37 @@ void kuwahara(sil::Image &image, int radius = 4)
     }
 }
 
+void normalize_histogram(sil::Image &image)
+{
+    if (image.pixels().empty())
+    {
+        return;
+    }
+
+    float min_b = std::numeric_limits<float>::max();
+    float max_b = 0.f;
+
+    for (const glm::vec3 &color : image.pixels())
+    {
+        float b = getLuminance(color);
+        min_b = std::min(min_b, b);
+        max_b = std::max(max_b, b);
+    }
+
+    if (max_b <= min_b)
+    {
+        return;
+    }
+
+    for (glm::vec3 &color : image.pixels())
+    {
+        color = (color - min_b) / (max_b - min_b);
+    }
+}
+
 int main()
 {
-    sil::Image image{"images/photo.jpg"};
-    kuwahara(image, 4);
-    image.save("output/kuwahara.png");
+    sil::Image image{"images/photo_faible_contraste.jpg"};
+    normalize_histogram(image);
+    image.save("output/histogram_normalization.png");
 }
