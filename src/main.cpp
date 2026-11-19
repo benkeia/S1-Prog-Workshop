@@ -656,9 +656,36 @@ void normalize_histogram(sil::Image &image)
     }
 }
 
+void dither(sil::Image &image)
+{
+    const float bayer[4][4] = {
+        {0.f, 8.f, 2.f, 10.f},
+        {12.f, 4.f, 14.f, 6.f},
+        {3.f, 11.f, 1.f, 9.f},
+        {15.f, 7.f, 13.f, 5.f}};
+
+    for (int x{0}; x < image.width(); ++x)
+    {
+        for (int y{0}; y < image.height(); ++y)
+        {
+            float luminance = getLuminance(image.pixel(x, y));
+            float threshold = bayer[y % 4][x % 4] / 16.f;
+
+            if (luminance > threshold)
+            {
+                image.pixel(x, y) = glm::vec3{1.f};
+            }
+            else
+            {
+                image.pixel(x, y) = glm::vec3{0.f};
+            }
+        }
+    }
+}
+
 int main()
 {
-    sil::Image image{"images/photo_faible_contraste.jpg"};
-    normalize_histogram(image);
-    image.save("output/histogram_normalization.png");
+    sil::Image image{"images/photo.jpg"};
+    dither(image);
+    image.save("output/dither.png");
 }

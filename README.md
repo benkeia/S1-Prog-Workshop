@@ -87,6 +87,12 @@
 | --- | --- | --- | --- |
 | ![Dégradé rouge vert sRGB](output/gradient/red_green_srgb.png) | ![Dégradé rouge vert Oklab](output/gradient/red_green_oklab.png) | ![Dégradé rouge bleu sRGB](output/gradient/red_blue_srgb.png) | ![Dégradé rouge bleu Oklab](output/gradient/red_blue_oklab.png) |
 
+## ⭐⭐⭐(⭐) Tramage
+
+| Avant | Après |
+| --- | --- |
+| ![Avant](images/photo.jpg) | ![Après](output/dither.png) |
+
 ## ⭐⭐⭐(⭐) Normalisation de l'histogramme
 
 | Avant | Après |
