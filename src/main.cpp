@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <complex>
 #include <limits>
+#include <glm/gtx/matrix_transform_2d.hpp>
 
 void keep_green_only(sil::Image &image)
 {
@@ -683,9 +684,43 @@ void dither(sil::Image &image)
     }
 }
 
+glm::vec2 rotated(glm::vec2 point, glm::vec2 center_of_rotation, float angle)
+{
+    return glm::vec2{glm::rotate(glm::mat3{1.f}, angle) * glm::vec3{point - center_of_rotation, 0.f}} + center_of_rotation;
+}
+
+void vortex(sil::Image &image)
+{
+    sil::Image copy = image;
+    glm::vec2 center{image.width() / 2.f, image.height() / 2.f};
+
+    for (int x{0}; x < image.width(); ++x)
+    {
+        for (int y{0}; y < image.height(); ++y)
+        {
+            glm::vec2 point{x, y};
+            float distance = glm::distance(point, center);
+            float angle = distance * 0.03f;
+            glm::vec2 source = rotated(point, center, angle);
+
+            int src_x = static_cast<int>(source.x);
+            int src_y = static_cast<int>(source.y);
+
+            if (src_x >= 0 && src_x < image.width() && src_y >= 0 && src_y < image.height())
+            {
+                image.pixel(x, y) = copy.pixel(src_x, src_y);
+            }
+            else
+            {
+                image.pixel(x, y) = glm::vec3{0.f};
+            }
+        }
+    }
+}
+
 int main()
 {
     sil::Image image{"images/photo.jpg"};
-    dither(image);
-    image.save("output/dither.png");
+    vortex(image);
+    image.save("output/vortex.png");
 }

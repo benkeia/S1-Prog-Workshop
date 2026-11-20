@@ -99,6 +99,12 @@
 | --- | --- |
 | ![Avant](images/photo_faible_contraste.jpg) | ![Après](output/histogram_normalization.png) |
 
+## ⭐⭐⭐⭐ Vortex
+
+| Avant | Après |
+| --- | --- |
+| ![Avant](images/photo.jpg) | ![Après](output/vortex.png) |
+
 ## ⭐⭐⭐⭐⭐ K-means : trouver les couleurs les plus présentes dans une image
 
 | Originale | 2 couleurs | 3 couleurs | 16 couleurs |
