@@ -718,9 +718,81 @@ void vortex(sil::Image &image)
     }
 }
 
+void convolution(sil::Image &image, const std::vector<std::vector<float>> &kernel)
+{
+    sil::Image copy = image;
+    int kh = static_cast<int>(kernel.size());
+    int kw = static_cast<int>(kernel[0].size());
+    int half_y = kh / 2;
+    int half_x = kw / 2;
+
+    for (int x{0}; x < image.width(); ++x)
+    {
+        for (int y{0}; y < image.height(); ++y)
+        {
+            glm::vec3 sum{0.f};
+
+            for (int ky{0}; ky < kh; ++ky)
+            {
+                for (int kx{0}; kx < kw; ++kx)
+                {
+                    int nx = x + kx - half_x;
+                    int ny = y + ky - half_y;
+
+                    if (nx >= 0 && nx < image.width() && ny >= 0 && ny < image.height())
+                    {
+                        sum += copy.pixel(nx, ny) * kernel[ky][kx];
+                    }
+                }
+            }
+
+            image.pixel(x, y) = glm::clamp(sum, glm::vec3{0.f}, glm::vec3{1.f});
+        }
+    }
+}
+
+void box_blur(sil::Image &image, int size = 5)
+{
+    float weight = 1.f / static_cast<float>(size * size);
+    std::vector<std::vector<float>> kernel(size, std::vector<float>(size, weight));
+    convolution(image, kernel);
+}
+
 int main()
 {
-    sil::Image image{"images/photo.jpg"};
-    vortex(image);
-    image.save("output/vortex.png");
+    {
+        sil::Image image{"images/photo.jpg"};
+        box_blur(image, 5);
+        image.save("output/convolution/box_blur.png");
+    }
+    {
+        sil::Image image{"images/photo.jpg"};
+        std::vector<std::vector<float>> emboss = {
+            {-2.f, -1.f, 0.f},
+            {-1.f,  1.f, 1.f},
+            { 0.f,  1.f, 2.f},
+        };
+        convolution(image, emboss);
+        image.save("output/convolution/emboss.png");
+    }
+    {
+        sil::Image image{"images/photo.jpg"};
+        std::vector<std::vector<float>> outline = {
+            {-1.f, -1.f, -1.f},
+            {-1.f,  8.f, -1.f},
+            {-1.f, -1.f, -1.f},
+        };
+        convolution(image, outline);
+        image.save("output/convolution/outline.png");
+    }
+    {
+        sil::Image image{"images/photo.jpg"};
+        std::vector<std::vector<float>> sharpen = {
+            { 0.f, -1.f,  0.f},
+            {-1.f,  5.f, -1.f},
+            { 0.f, -1.f,  0.f},
+        };
+        convolution(image, sharpen);
+        image.save("output/convolution/sharpen.png");
+    }
 }
